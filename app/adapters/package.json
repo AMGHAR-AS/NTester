@@ -1,0 +1,77 @@
+{
+  "name": "@ntester/adapters",
+  "version": "0.1.0",
+  "description": "Terminal adapters for NTester - choose your rendering engine",
+  "type": "module",
+  "main": "index.js",
+  "author": "NTester Team",
+  "license": "MIT",
+  "peerDependencies": {
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.3",
+    "ora": "^8.0.1",
+    "inquirer": "^9.2.12",
+    "log-update": "^6.0.0",
+    "ink": "^4.4.1",
+    "react": "^18.2.0",
+    "ink-table": "^3.1.0",
+    "ink-spinner": "^5.0.0",
+    "ink-select-input": "^5.0.0",
+    "ink-text-input": "^5.0.1"
+  },
+  "peerDependenciesMeta": {
+    "chalk": {
+      "optional": true
+    },
+    "cli-table3": {
+      "optional": true
+    },
+    "ora": {
+      "optional": true
+    },
+    "inquirer": {
+      "optional": true
+    },
+    "log-update": {
+      "optional": true
+    },
+    "ink": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "ink-table": {
+      "optional": true
+    },
+    "ink-spinner": {
+      "optional": true
+    },
+    "ink-select-input": {
+      "optional": true
+    },
+    "ink-text-input": {
+      "optional": true
+    }
+  },
+  "keywords": [
+    "terminal",
+    "cli",
+    "adapter",
+    "chalk",
+    "ink",
+    "react",
+    "ora",
+    "inquirer",
+    "testing",
+    "ntester"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./AbstractAdapter": "./AbstractAdapter.js",
+    "./ModernStackAdapter": "./ModernStackAdapter.js",
+    "./InkAdapter": "./InkAdapter.js",
+    "./MinimalAdapter": "./MinimalAdapter.js",
+    "./AdapterFactory": "./AdapterFactory.js"
+  }
+}
