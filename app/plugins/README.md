@@ -1,51 +1,51 @@
 # 🔌 NTester Plugin System
 
-Système de plugins extensible pour NTester permettant d'étendre les fonctionnalités du framework de test.
+Extensible plugin system for NTester allowing to extend the test framework functionality.
 
-## 📋 Table des Matières
+## 📋 Table of Contents
 
-1. [Vue d'ensemble](#vue-densemble)
-2. [Plugins disponibles](#plugins-disponibles)
+1. [Overview](#vue-densemble)
+2. [Available Plugins](#plugins-disponibles)
 3. [Installation](#installation)
-4. [Utilisation rapide](#utilisation-rapide)
+4. [Quick Start](#utilisation-rapide)
 5. [Architecture](#architecture)
-6. [Créer un plugin](#créer-un-plugin)
+6. [Creating a Plugin](#créer-un-plugin)
 7. [API](#api)
-8. [Exemples](#exemples)
+8. [Examples](#exemples)
 
-## 🎯 Vue d'ensemble
+## 🎯 Overview
 
-Le système de plugins NTester permet de :
+The NTester plugin system allows you to :
 
-- ✅ **Étendre** les fonctionnalités sans modifier le core
-- ✅ **Choisir** les renderers terminaux (Modern, Ink, Minimal)
-- ✅ **Exporter** les résultats en HTML
-- ✅ **Servir** les rapports avec live reload
-- ✅ **Créer** vos propres plugins facilement
+- ✅ **Extend** les fonctionnalités without modifying the core
+- ✅ **Choose** terminal renderers (Modern, Ink, Minimal)
+- ✅ **Export** results to HTML
+- ✅ **Serve** reports with live reload
+- ✅ **Create** your own plugins easily
 
-### Cycle de Vie des Plugins
+### Plugin Lifecycle
 
-Les plugins peuvent s'intégrer à différents moments :
+Plugins can integrate at different moments :
 
 ```
 ┌─────────────┐
-│  onInit     │  Initialisation avec contexte NTester
+│  onInit     │  Initialization with NTester context
 ├─────────────┤
-│ onBeforeRun │  Avant l'exécution des tests
+│ onBeforeRun │  Before test execution
 ├─────────────┤
-│onBeforeTest │  Avant chaque sous-test
+│onBeforeTest │  Before each sub-test
 ├─────────────┤
-│onBeforeStep │  Avant chaque étape
+│onBeforeStep │  Before each step
 ├─────────────┤
-│ onAfterStep │  Après chaque étape
+│ onAfterStep │  After each step
 ├─────────────┤
-│ onAfterTest │  Après chaque sous-test
+│ onAfterTest │  After each sub-test
 ├─────────────┤
-│ onAfterRun  │  Après l'exécution des tests
+│ onAfterRun  │  After test execution
 ├─────────────┤
-│  onReport   │  Génération du rapport
+│  onReport   │  Report generation
 ├─────────────┤
-│  onDestroy  │  Nettoyage
+│  onDestroy  │  Cleanup
 └─────────────┘
 ```
 
@@ -55,10 +55,10 @@ Les plugins peuvent s'intégrer à différents moments :
 
 Utilise les adapters terminaux pour afficher les résultats.
 
-**Caractéristiques** :
-- Supporte Modern Stack, Ink, Minimal
-- Affichage en temps réel
-- Statistiques automatiques
+**Features** :
+- Supports Modern Stack, Ink, Minimal
+- Real-time display
+- Automatic statistics
 
 **Usage** :
 ```javascript
@@ -72,13 +72,13 @@ const plugin = new RendererPlugin({
 
 ### 2. HTMLExportPlugin
 
-Exporte les résultats en HTML avec styles et interactivité.
+Exporte results to HTML avec styles et interactivité.
 
-**Caractéristiques** :
-- Rapport HTML responsive
-- Statistiques détaillées
-- Collapse/expand des tests
-- Mise en évidence des erreurs
+**Features** :
+- Responsive HTML report
+- Detailed statistics
+- Collapse/expand tests
+- Error highlighting
 
 **Usage** :
 ```javascript
@@ -94,13 +94,13 @@ const plugin = new HTMLExportPlugin({
 
 ### 3. HTMLServerPlugin
 
-Serveur HTTP avec live reload pour les rapports HTML.
+HTTP server with live reload for HTML reports.
 
-**Caractéristiques** :
-- Server-Sent Events pour live reload
-- Surveillance des changements
-- Rechargement automatique
-- Interface de monitoring
+**Features** :
+- Server-Sent Events for live reload
+- File watching
+- Automatic reload
+- Monitoring interface
 
 **Usage** :
 ```javascript
@@ -117,28 +117,28 @@ await plugin.start();
 
 ## 🚀 Installation
 
-Aucune installation supplémentaire requise si vous utilisez :
+No additional installation required si vous utilisez :
 - **RendererPlugin** avec adapter Minimal
 - **HTMLExportPlugin**
 - **HTMLServerPlugin**
 
-Pour les autres adapters, voir la [documentation des adapters](../adapters/README.md).
+For other adapters, see la [documentation des adapters](../adapters/README.md).
 
 ## ⚡ Utilisation Rapide
 
-### Exemple Basique
+### Basic Example
 
 ```javascript
 import { it, NTester } from './app/NTester.js';
 import { getPluginManager } from './app/plugins/PluginManager.js';
 import RendererPlugin from './app/plugins/RendererPlugin.js';
 
-// 1. Créer et enregistrer le plugin
+// 1. Create et enregistrer le plugin
 const manager = getPluginManager();
 const renderer = new RendererPlugin({ adapterType: 'minimal' });
 manager.register('renderer', renderer);
 
-// 2. Créer et exécuter les tests
+// 2. Create et exécuter les tests
 const test = new NTester('My Test', { project: 'MyProject' });
 
 // ... ajouter des tests ...
@@ -152,7 +152,7 @@ await runResult.console();
 await manager.destroyAll();
 ```
 
-### Exemple Complet (Multi-plugins)
+### Complete Example (Multi-plugins)
 
 ```javascript
 import { getPluginManager } from './app/plugins/PluginManager.js';
@@ -220,14 +220,14 @@ PluginTypes.HOOK        // Hooks génériques
 
 ### PluginManager
 
-Gère le cycle de vie et l'exécution des plugins.
+Manages plugin lifecycle and execution.
 
 ```javascript
 import { getPluginManager } from './plugins/PluginManager.js';
 
 const manager = getPluginManager();
 
-// Enregistrement
+// Registration
 manager.register(name, plugin, type);
 
 // Initialisation
@@ -236,24 +236,24 @@ await manager.initAll(context);
 // Exécution de hooks
 await manager.executeHook('onAfterRun', process);
 
-// Gestion
+// Management
 manager.enable(name);
 manager.disable(name);
 manager.has(name);
 manager.get(name);
 manager.getByType(type);
 
-// Statistiques
+// Statistics
 const stats = manager.getStats();
 // { total, enabled, disabled, byType: {...} }
 
-// Nettoyage
+// Cleanup
 await manager.destroyAll();
 ```
 
-## 🔧 Créer un Plugin
+## 🔧 Create un Plugin
 
-### Plugin Simple
+### Simple Plugin
 
 ```javascript
 import AbstractPlugin from './plugins/AbstractPlugin.js';
@@ -279,13 +279,13 @@ export default class MyPlugin extends AbstractPlugin {
     }
 
     async onAfterRun(process) {
-        // Votre logique ici
+        // Your logic ici
         console.log(`Processed ${process.subTests.length} tests`);
     }
 }
 ```
 
-### Plugin Reporter
+### Reporter Plugin
 
 ```javascript
 import { ReporterPlugin } from './plugins/AbstractPlugin.js';
@@ -304,14 +304,14 @@ export default class MyReporter extends ReporterPlugin {
 }
 ```
 
-### Plugin Renderer
+### Renderer Plugin
 
 ```javascript
 import { RendererPlugin } from './plugins/AbstractPlugin.js';
 
 export default class MyRenderer extends RendererPlugin {
     async render(data) {
-        // Votre logique de rendu
+        // Your logic de rendu
         console.log('Rendering:', data);
     }
 
@@ -321,7 +321,7 @@ export default class MyRenderer extends RendererPlugin {
 }
 ```
 
-### Plugin Server
+### Server Plugin
 
 ```javascript
 import { ServerPlugin } from './plugins/AbstractPlugin.js';
@@ -349,7 +349,7 @@ export default class MyServer extends ServerPlugin {
 }
 ```
 
-## 📚 API Complète
+## 📚 Complete API
 
 ### AbstractPlugin
 
@@ -358,13 +358,13 @@ export default class MyServer extends ServerPlugin {
 ```javascript
 async onInit(context)           // Initialisation
 async onBeforeRun(process)      // Avant exécution globale
-async onBeforeTest(subTest)     // Avant chaque sous-test
-async onBeforeStep(step)        // Avant chaque étape
-async onAfterStep(step)         // Après chaque étape
-async onAfterTest(subTest)      // Après chaque sous-test
+async onBeforeTest(subTest)     // Before each sub-test
+async onBeforeStep(step)        // Before each step
+async onAfterStep(step)         // After each step
+async onAfterTest(subTest)      // After each sub-test
 async onAfterRun(process)       // Après exécution globale
 async onReport(process)         // Génération de rapport
-async onDestroy()               // Nettoyage
+async onDestroy()               // Cleanup
 ```
 
 #### Methods
@@ -428,7 +428,7 @@ async stop()                    // Arrête le serveur
 getURL()                        // URL du serveur
 ```
 
-## 💡 Exemples
+## 💡 Examples
 
 ### Utilisation dans les Tests
 
@@ -539,32 +539,32 @@ node tests/plugins-test.js
 node examples/plugins-demo.js
 ```
 
-## 📖 Documentation Complémentaire
+## 📖 Additional Documentation
 
 - [Documentation des Adapters](../adapters/README.md)
-- [Guide d'intégration](../../docs/ADAPTER-INTEGRATION.md)
-- [Proposition des Adapters](../../ADAPTERS-PROPOSAL.md)
+- [Integration Guide](../../docs/ADAPTER-INTEGRATION.md)
+- [Adapters Proposal](../../ADAPTERS-PROPOSAL.md)
 
 ## 🎯 Best Practices
 
-### 1. Gestion des Erreurs
+### 1. Management des Erreurs
 
 ```javascript
 async onAfterRun(process) {
     try {
-        // Votre logique
+        // Your logic
     } catch (error) {
         console.error('Plugin error:', error);
-        // Ne pas throw pour ne pas bloquer les autres plugins
+        // Don't throw to avoid blocking other plugins
     }
 }
 ```
 
-### 2. Nettoyage
+### 2. Cleanup
 
 ```javascript
 async onDestroy() {
-    // Toujours nettoyer les ressources
+    // Always clean up resources
     if (this.server) {
         await this.server.close();
     }
@@ -578,10 +578,10 @@ async onDestroy() {
 ### 3. Performance
 
 ```javascript
-// Lazy loading des dépendances
+// Lazy loading of dependencies
 async onInit(context) {
     if (this.isEnabled()) {
-        // Charger seulement si activé
+        // Load only if enabled
         const { default: heavyLib } = await import('heavy-lib');
         this.lib = heavyLib;
     }
@@ -594,27 +594,27 @@ async onInit(context) {
 constructor(options = {}) {
     super(options);
 
-    // Valeurs par défaut
+    // Default values
     this.option1 = options.option1 ?? 'default';
     this.option2 = options.option2 ?? true;
 }
 ```
 
-## 🚦 Statut
+## 🚦 Status
 
 **Version**: 0.2.0-alpha
-**Statut**: ✅ Ready for Testing
+**Status**: ✅ Ready for Testing
 **Tests**: 19/19 passed
 
-## 🤝 Contribution
+## 🤝 Contributing
 
-Pour créer un nouveau plugin :
+To create a new plugin :
 
-1. Étendre `AbstractPlugin` ou une classe spécialisée
-2. Implémenter les hooks nécessaires
-3. Ajouter des tests dans `tests/plugins-test.js`
-4. Documenter dans ce README
-5. Soumettre une PR
+1. Extend `AbstractPlugin` ou une classe spécialisée
+2. Implement necessary hooks
+3. Add tests in `tests/plugins-test.js`
+4. Document in this README
+5. Submit a PR
 
 ## 📄 License
 
@@ -623,5 +623,5 @@ MIT - Same as NTester
 ---
 
 **Date**: 13/11/2025
-**Auteur**: NTester Team
+**Author**: NTester Team
 **Status**: ✅ Production Ready

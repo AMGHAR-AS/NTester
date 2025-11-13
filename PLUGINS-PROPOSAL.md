@@ -1,10 +1,10 @@
-# 🔌 Proposition: Système de Plugins pour NTester
+# 🔌 Proposal: Plugin System for NTester
 
-## 📋 Résumé Exécutif
+## 📋 Executive Summary
 
-Cette proposition introduit un **système de plugins extensible** permettant d'étendre les fonctionnalités de NTester sans modifier le code core, tout en intégrant l'architecture modulaire des adapters terminaux.
+This proposal introduces un **système de plugins extensible** allowing to extend les fonctionnalités de NTester without modifying the core code, while integrating the modular architecture of terminal adapters.
 
-## 🎯 Objectifs
+## 🎯 Objectives
 
 1. ✅ **Extensibilité** - Ajouter des fonctionnalités sans modifier le core
 2. ✅ **Modularité** - Plugins indépendants et réutilisables
@@ -12,9 +12,9 @@ Cette proposition introduit un **système de plugins extensible** permettant d'�
 4. ✅ **Rapports** - Exporter en HTML avec styles modernes
 5. ✅ **Live Reload** - Serveur HTTP avec rechargement automatique
 
-## 🏗️ Architecture Implémentée
+## 🏗️ Implemented Architecture
 
-### Structure des Fichiers
+### File Structure
 
 ```
 app/plugins/
@@ -25,7 +25,7 @@ app/plugins/
 │   ├── ServerPlugin           # Base pour serveurs
 │   └── PluginTypes            # Énumération des types
 │
-├── PluginManager.js           # Gestionnaire central (294 lignes)
+├── PluginManager.js           # Central manager (294 lignes)
 │   ├── register()             # Enregistrement de plugins
 │   ├── initAll()              # Initialisation
 │   ├── executeHook()          # Exécution des hooks
@@ -40,7 +40,7 @@ app/plugins/
 │   ├── Génération HTML        # Rapport complet
 │   ├── Styles modernes        # CSS responsive
 │   ├── Interactivité          # Collapse/expand
-│   └── Statistiques           # Métriques détaillées
+│   └── Statistiques           # Metrics détaillées
 │
 ├── HTMLServerPlugin.js        # Serveur HTTP (340 lignes)
 │   ├── Server HTTP            # Node.js http
@@ -72,7 +72,7 @@ examples/plugins-demo.js       # Démonstration (270 lignes)
 └── Exemple complet            # Tous les plugins en action
 ```
 
-**Total**: ~2,160 lignes de code + documentation
+**Total**: ~2,160 lines of code + documentation
 
 ## 🎨 Cycle de Vie des Plugins
 
@@ -94,7 +94,7 @@ examples/plugins-demo.js       # Démonstration (270 lignes)
 ├─────────────────────────────────────────────┤
 │  4. onBeforeStep(step)                      │  ← Avant chaque étape
 │     - Logging détaillé                      │
-│     - Métriques                             │
+│     - Metrics                             │
 ├─────────────────────────────────────────────┤
 │       [EXECUTION DE L'ÉTAPE]                │
 ├─────────────────────────────────────────────┤
@@ -179,7 +179,7 @@ const plugin = new HTMLExportPlugin({
 **Rôle**: Serveur HTTP avec live reload
 
 **Fonctionnalités**:
-- ✅ Serveur HTTP Node.js
+- ✅ Node.js HTTP server
 - ✅ Live reload via Server-Sent Events
 - ✅ Surveillance du fichier HTML
 - ✅ Notifications aux clients
@@ -208,7 +208,7 @@ await plugin.start();
 4. Clients rechargent automatiquement
 5. Console logs des événements
 
-## 📊 Comparaison Avant/Après
+## 📊 Before/After Comparison
 
 | Aspect | Avant | Après |
 |--------|-------|-------|
@@ -292,9 +292,9 @@ Success Rate: 60%
 ✅ Demo completed successfully!
 ```
 
-## 📈 Bénéfices
+## 📈 Benefits
 
-### Pour les Développeurs
+### For Developers
 
 - ✅ **Plugins personnalisés** faciles à créer
 - ✅ **Lifecycle hooks** à tous les niveaux
@@ -310,7 +310,7 @@ Success Rate: 60%
 - ✅ **Tests** - Plugins testés séparément
 - ✅ **Performance** - Lazy loading des dépendances
 
-### Pour les Utilisateurs
+### For Users
 
 - ✅ **Choix** - Activer uniquement les plugins nécessaires
 - ✅ **Rapports HTML** - Visualisation moderne
@@ -472,7 +472,7 @@ await (await test.run()).console();
 - 📝 `ADAPTERS-PROPOSAL.md` - Architecture des adapters
 - 📝 `docs/ADAPTER-INTEGRATION.md` - Guide d'intégration
 
-## 🎯 Métriques de Succès
+## 🎯 Metrics de Succès
 
 ### Implémentation
 
@@ -502,16 +502,16 @@ await (await test.run()).console();
 
 **Status Actuel**: ✅ **READY FOR REVIEW**
 
-**Prochaines Étapes**:
+**Next Steps**:
 1. Review de la PR
 2. Tests d'intégration approfondis
 3. Documentation utilisateur finale
 4. Exemples additionnels
 5. Release 0.2.0-alpha
 
-## 🔮 Évolutions Futures
+## 🔮 Future Evolutions
 
-### Court Terme (v0.2.x)
+### Short Term (v0.2.x)
 
 1. **Plugin JUnit XML Export**
    - Export au format JUnit XML
@@ -525,7 +525,7 @@ await (await test.run()).console();
    - Intégration avec c8/istanbul
    - Rapport de couverture
 
-### Moyen Terme (v0.3.x)
+### Medium Term (v0.3.x)
 
 4. **Plugin Slack/Discord Notifier**
    - Notifications des résultats
@@ -536,10 +536,10 @@ await (await test.run()).console();
    - Intégration Playwright/Puppeteer
 
 6. **Plugin Performance**
-   - Métriques de performance
+   - Metrics de performance
    - Benchmarking
 
-### Long Terme (v1.0+)
+### Long Term (v1.0+)
 
 7. **Plugin Ecosystem**
    - Registry de plugins communautaires

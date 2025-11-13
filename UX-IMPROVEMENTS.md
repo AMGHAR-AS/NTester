@@ -1,40 +1,40 @@
-# 🎨 Améliorations UX - NTester Plugins
+# 🎨 UX Improvements - NTester Plugins
 
 ## 📋 Résumé Exécutif
 
-Améliorations majeures de l'expérience utilisateur pour les rapports HTML et le serveur de développement, avec un design moderne, des interactions fluides et des fonctionnalités avancées.
+Major user experience improvements for HTML reports and development server, with modern design, smooth interactions et advanced features.
 
-## ✨ Améliorations du HTMLExportPlugin
+## ✨ HTMLExportPlugin Improvements
 
-### 🎯 Nouvelles Fonctionnalités
+### 🎯 New Features
 
-#### 1. **Toolbar Fixe**
-- Position fixe en haut de la page
-- Reste visible pendant le scroll
-- Design glassmorphism (backdrop-filter blur)
+#### 1. **Fixed Toolbar**
+- Fixed position at top of page
+- Stays visible while scrolling
+- Glassmorphism design (backdrop-filter blur)
 
-**Composants** :
-- 🔍 **Recherche en temps réel** - Filtre les tests instantanément
-- 🌙 **Dark Mode Toggle** - Bascule entre thème clair/sombre
-- 📥 **Export JSON** - Exporte les résultats (à implémenter)
-- 🖨️ **Print** - Mode impression optimisé
+**Components** :
+- 🔍 **Real-time search** - Filters tests instantly
+- 🌙 **Dark Mode Toggle** - Toggle between light/dark theme
+- 📥 **Export JSON** - Exports results (to implement)
+- 🖨️ **Print** - Optimized print mode
 
-#### 2. **Système de Filtres Interactifs**
+#### 2. **Interactive Filters System**
 ```
 📋 All Tests    | ✅ Passed Only    | ❌ Failed Only
 ```
-- Boutons avec état actif visuel
-- Animation au hover
-- Filtre instantané des tests
-- Design avec icônes explicites
+- Buttons with visual active state
+- Hover animation
+- Instant test filtering
+- Design with explicit icons
 
-#### 3. **Dark Mode Complet**
-- Toggle persistant (localStorage)
-- CSS variables pour tous les éléments
-- Transition smooth (0.3s)
-- Icônes dynamiques (🌙/☀️)
+#### 3. **Complete Dark Mode**
+- Persistent toggle (localStorage)
+- CSS variables for all elements
+- Smooth transition (0.3s)
+- Dynamic icons (🌙/☀️)
 
-**Thèmes** :
+**Themes** :
 ```css
 Light Mode:
 - Background: #f8f9fa
@@ -68,7 +68,7 @@ Dark Mode:
 - Design avec border coloré
 
 #### 7. **Recherche Intelligente**
-- Recherche en temps réel
+- Real-time search
 - Filtre par nom de test, step, message
 - Highlight visuel du champ actif
 - Pas de rechargement de page
@@ -247,7 +247,7 @@ Endpoint JSON avec statistiques :
 #### Dark Mode
 - Toggle indépendant du rapport
 - Même système de CSS variables
-- Transition smooth
+- Smooth transition
 
 ### 🔧 Améliorations Techniques
 
@@ -273,7 +273,7 @@ Endpoint JSON avec statistiques :
 - 🎨 `app/plugins/HTMLExportPlugin.js` - Nouvelles méthodes toolbar, filters, floating actions
 - 🌐 `app/plugins/HTMLServerPlugin.js` - Pages status et API stats
 
-## 🎯 Comparaison Avant/Après
+## 🎯 Before/After Comparison
 
 | Feature | Avant | Après |
 |---------|-------|-------|
@@ -290,9 +290,9 @@ Endpoint JSON avec statistiques :
 | **Responsive** | ⚠️ Basique | ✅ Optimisé mobile |
 | **Print** | ⚠️ Basique | ✅ Styles dédiés |
 
-## 🚀 Comment Utiliser
+## 🚀 How to Use
 
-### Générer un Rapport Moderne
+### Generate Modern Report
 ```javascript
 import HTMLExportPlugin from './app/plugins/HTMLExportPlugin.js';
 
@@ -312,7 +312,7 @@ await plugin.generate(results);
 - Floating action button
 - Toutes les améliorations UX
 
-### Démarrer le Serveur avec Dashboard
+### Start Server with Dashboard
 ```javascript
 import HTMLServerPlugin from './app/plugins/HTMLServerPlugin.js';
 
@@ -327,7 +327,7 @@ console.log('Dashboard: http://localhost:3000/status');
 console.log('API: http://localhost:3000/api/stats');
 ```
 
-### Voir la Demo Standalone
+### See Standalone Demo
 ```bash
 # Ouvrir dans un navigateur
 open examples/modern-html-demo.html
@@ -337,9 +337,9 @@ python3 -m http.server 8000
 # Puis http://localhost:8000/examples/modern-html-demo.html
 ```
 
-## 💡 Fonctionnalités Interactives
+## 💡 Interactive Features
 
-### Dans le Rapport HTML
+### In HTML Report
 
 1. **Dark Mode**
    - Cliquer sur 🌙 dans la toolbar
@@ -366,7 +366,7 @@ python3 -m http.server 8000
    - Ctrl/Cmd+P pour imprimer
    - Layout optimisé automatiquement
 
-### Sur le Dashboard Serveur
+### On Server Dashboard
 
 1. **Monitoring**
    - Stats qui se rafraîchissent toutes les 5s
@@ -378,11 +378,11 @@ python3 -m http.server 8000
    - "Refresh Stats" → Rafraîchit manuellement
    - "Dark Mode" → Toggle thème
 
-3. **Indicateurs**
+3. **Indicators**
    - Pulse vert = Server online
    - Badges colorés = Status features
 
-## 🎨 Palette de Couleurs
+## 🎨 Color Palette
 
 ### Light Mode
 ```css
@@ -401,49 +401,49 @@ Text:       #f9fafb (Blanc cassé)
 Border:     #374151 (Gris moyen)
 ```
 
-## 📈 Bénéfices
+## 📈 Benefits
 
-### Pour les Développeurs
+### For Developers
 - ✅ Interface moderne et professionnelle
 - ✅ Meilleure lisibilité des résultats
 - ✅ Navigation facilitée
 - ✅ Monitoring serveur en temps réel
 - ✅ Dark mode pour sessions nocturnes
 
-### Pour les Utilisateurs
+### For Users
 - ✅ Expérience visuelle agréable
 - ✅ Interactions fluides et intuitives
 - ✅ Responsive (mobile-friendly)
 - ✅ Accessible (print, keyboard)
 - ✅ Performances optimisées
 
-### Pour le Projet
+### For the Project
 - ✅ Image professionnelle
 - ✅ Code moderne et maintenable
 - ✅ Extensible facilement
 - ✅ Documentation visuelle par l'exemple
 
-## 🔮 Évolutions Futures
+## 🔮 Future Evolutions
 
-### Court Terme
+### Short Term
 - ✅ Implémenter l'export JSON réel
 - 📊 Ajouter des graphiques (charts.js)
 - 🔔 Notifications desktop (avec permission)
 - 📸 Screenshots automatiques des erreurs
 
-### Moyen Terme
+### Medium Term
 - 🎨 Themes personnalisables (couleurs)
 - 📝 Annotations sur les tests
 - 🔗 Partage de rapports (URL)
 - 💾 Sauvegarde des filtres/recherches
 
-### Long Terme
+### Long Term
 - 📊 Dashboard avec historique des tests
 - 📈 Graphiques de tendances
 - 🤖 AI insights sur les échecs
 - 🌍 Internationalisation (i18n)
 
-## 🎓 Technologies Utilisées
+## 🎓 Technologies Used
 
 - **CSS Variables** - Theming dynamique
 - **CSS Grid** - Layouts responsives
@@ -453,7 +453,7 @@ Border:     #374151 (Gris moyen)
 - **Fetch API** - Appels asynchrones
 - **Modern ES6+** - Code propre et maintenable
 
-## 📊 Métriques
+## 📊 Metrics
 
 - **+1,377 lignes** de code ajoutées
 - **-22 lignes** supprimées (refactoring)
