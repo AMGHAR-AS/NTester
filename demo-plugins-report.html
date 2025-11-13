@@ -1,25 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NTester Plugins Demo Report</title>
     <style>
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ========== CSS VARIABLES ========== */
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5568d3;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --bg-main: #f8f9fa;
+            --bg-card: #ffffff;
+            --bg-hover: #f3f4f6;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --radius-sm: 6px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #111827;
+            --bg-card: #1f2937;
+            --bg-hover: #374151;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --text-muted: #9ca3af;
+            --border: #374151;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
             line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 80px 20px 20px;
         }
+
+        /* ========== TOOLBAR ========== */
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+        }
+
+        .toolbar-left h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 280px;
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .btn-icon:hover {
+            background: var(--border);
+            transform: translateY(-2px);
+        }
+
+        [data-theme="light"] .icon-dark { display: none; }
+        [data-theme="dark"] .icon-light { display: none; }
 
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -222,40 +341,108 @@
     </style>
 </head>
 <body>
+    
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <h2>🧪 NTester Report</h2>
+            </div>
+            <div class="toolbar-right">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Search tests..." />
+                </div>
+                <button class="btn-icon" id="darkModeToggle" title="Toggle Dark Mode">
+                    <span class="icon-light">🌙</span>
+                    <span class="icon-dark">☀️</span>
+                </button>
+                <button class="btn-icon" id="exportJson" title="Export as JSON">📥</button>
+                <button class="btn-icon" id="printReport" title="Print Report">🖨️</button>
+            </div>
+        </div>
     <div class="container">
         
         <header>
-            <h1>📊 NTester Plugins Demo Report</h1>
+            <div class="header-title">
+                <h1>📊 NTester Plugins Demo Report</h1>
+                <span class="header-subtitle">Plugin System Demo</span>
+            </div>
             <div class="header-info">
-                <div><strong>Project:</strong> NTester</div>
-                <div><strong>Version:</strong> 0.2.0-alpha</div>
-                <div><strong>Date:</strong> 11/13/2025, 1:44:18 PM</div>
-                <div><strong>Authors:</strong> NTester Team</div>
+                <div class="info-item">
+                    <span class="info-label">Project</span>
+                    <span class="info-value">NTester</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Version</span>
+                    <span class="info-value">0.2.0-alpha</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Date</span>
+                    <span class="info-value">11/13/2025, 1:53:54 PM</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">Authors</span>
+                    <span class="info-value">NTester Team</span>
+                </div>
             </div>
         </header>
         
         <section class="stats partial">
             <div class="stat-card">
-                <div class="stat-value">4</div>
-                <div class="stat-label">Tests</div>
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Tests</div>
+                </div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">10</div>
-                <div class="stat-label">Steps</div>
+                <div class="stat-icon">📝</div>
+                <div class="stat-content">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Steps</div>
+                </div>
             </div>
             <div class="stat-card success">
-                <div class="stat-value">6</div>
-                <div class="stat-label">Passed</div>
+                <div class="stat-icon">✅</div>
+                <div class="stat-content">
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">Passed</div>
+                </div>
             </div>
             <div class="stat-card failure">
-                <div class="stat-value">4</div>
-                <div class="stat-label">Failed</div>
+                <div class="stat-icon">❌</div>
+                <div class="stat-content">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Failed</div>
+                </div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">60%</div>
-                <div class="stat-label">Success Rate</div>
+                <div class="stat-icon">📈</div>
+                <div class="stat-content">
+                    <div class="stat-value">60%</div>
+                    <div class="stat-label">Success Rate</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill failure"
+                             style="width: 60%"
+                             data-percentage="60"></div>
+                    </div>
+                </div>
             </div>
         </section>
+        
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">
+                <span class="filter-icon">📋</span>
+                All Tests
+            </button>
+            <button class="filter-btn" data-filter="passed">
+                <span class="filter-icon">✅</span>
+                Passed Only
+            </button>
+            <button class="filter-btn" data-filter="failed">
+                <span class="filter-icon">❌</span>
+                Failed Only
+            </button>
+        </div>
         <section class="test-results">
         <div class="subtest failure">
             <h2 class="subtest-header" onclick="toggleSubtest(this)">
@@ -348,7 +535,185 @@
             </div>
         </div></section>
     </div>
+    
+        <div class="floating-actions">
+            <button class="fab" id="scrollTop" title="Scroll to Top">↑</button>
+        </div>
+        <div id="toast" class="toast"></div>
     <script>
+        const RESULTS_DATA = {
+  "project": "NTester",
+  "version": "0.2.0-alpha",
+  "date": "2025-11-13T13:53:54.554Z",
+  "testName": "Plugin System Demo",
+  "section": "",
+  "authors": [
+    "NTester Team"
+  ],
+  "subTests": [
+    {
+      "name": "Primitive Type Tests",
+      "section": "Basic Tests",
+      "steps": [
+        {
+          "name": "number-test",
+          "index": 0,
+          "passed": true,
+          "results": [
+            true
+          ],
+          "messages": [
+            "✓ Number validation works"
+          ],
+          "error": null
+        },
+        {
+          "name": "string-test",
+          "index": 1,
+          "passed": true,
+          "results": [
+            true,
+            true
+          ],
+          "messages": [
+            "✓ String validation works"
+          ],
+          "error": null
+        },
+        {
+          "name": "boolean-test",
+          "index": 2,
+          "passed": false,
+          "results": [
+            false
+          ],
+          "messages": [],
+          "error": {
+            "message": "it(...).boolean is not a function",
+            "stack": "TypeError: it(...).boolean is not a function\n    at primitiveTests.addStep.name [as call] (file:///home/user/NTester/examples/plugins-demo.js:127:18)\n    at runStep (file:///home/user/NTester/app/process.js:42:26)\n    at async runSTest (file:///home/user/NTester/app/process.js:70:17)\n    at async process.i.run (file:///home/user/NTester/app/process.js:79:13)\n    at async main (file:///home/user/NTester/examples/plugins-demo.js:238:27)",
+            "name": "TypeError"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Collection Tests",
+      "section": "Advanced Tests",
+      "steps": [
+        {
+          "name": "array-test",
+          "index": 0,
+          "passed": true,
+          "results": [
+            true,
+            true
+          ],
+          "messages": [
+            "✓ Array validation works"
+          ],
+          "error": null
+        },
+        {
+          "name": "object-test",
+          "index": 1,
+          "passed": false,
+          "results": [
+            false,
+            true
+          ],
+          "messages": [
+            "✓ Object validation works"
+          ],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Logic Tests",
+      "section": "Logic Operations",
+      "steps": [
+        {
+          "name": "and-test",
+          "index": 0,
+          "passed": true,
+          "results": [
+            true
+          ],
+          "messages": [
+            "✓ AND logic works"
+          ],
+          "error": null
+        },
+        {
+          "name": "or-test",
+          "index": 1,
+          "passed": true,
+          "results": [
+            true
+          ],
+          "messages": [
+            "✓ OR logic works"
+          ],
+          "error": null
+        },
+        {
+          "name": "not-test",
+          "index": 2,
+          "passed": true,
+          "results": [
+            true,
+            true
+          ],
+          "messages": [
+            "✓ NOT logic works"
+          ],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Async Tests",
+      "section": "Asynchronous",
+      "steps": [
+        {
+          "name": "promise-test",
+          "index": 0,
+          "passed": false,
+          "results": [
+            false
+          ],
+          "messages": [],
+          "error": {
+            "message": "it(...).awaitResult is not a function",
+            "stack": "TypeError: it(...).awaitResult is not a function\n    at asyncTests.addStep.name [as call] (file:///home/user/NTester/examples/plugins-demo.js:196:21)\n    at runStep (file:///home/user/NTester/app/process.js:42:26)\n    at async runSTest (file:///home/user/NTester/app/process.js:70:17)\n    at async process.i.run (file:///home/user/NTester/app/process.js:79:13)\n    at async main (file:///home/user/NTester/examples/plugins-demo.js:238:27)",
+            "name": "TypeError"
+          }
+        },
+        {
+          "name": "async-chain-test",
+          "index": 1,
+          "passed": false,
+          "results": [
+            false
+          ],
+          "messages": [],
+          "error": {
+            "message": "it(...).awaitResult is not a function",
+            "stack": "TypeError: it(...).awaitResult is not a function\n    at asyncTests.addStep.name [as call] (file:///home/user/NTester/examples/plugins-demo.js:205:16)\n    at runStep (file:///home/user/NTester/app/process.js:42:26)\n    at async runSTest (file:///home/user/NTester/app/process.js:70:17)\n    at async process.i.run (file:///home/user/NTester/app/process.js:79:13)\n    at async main (file:///home/user/NTester/examples/plugins-demo.js:238:27)",
+            "name": "TypeError"
+          }
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "totalTests": 4,
+    "totalSteps": 10,
+    "passed": 6,
+    "failed": 4,
+    "successRate": 60
+  }
+};
         
         function toggleSubtest(header) {
             const subtest = header.parentElement;
