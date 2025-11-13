@@ -4,7 +4,7 @@ import { createAdapter } from '../adapters/index.js';
 /**
  * RendererPlugin - Plugin pour utiliser les adapters terminaux
  *
- * Permet d'utiliser les adapters (Modern, Ink, Minimal) via le système de plugins
+ * Allows using adapters (Modern, Ink, Minimal) via the plugin system
  */
 export default class RendererPlugin extends BaseRendererPlugin {
     constructor(options = {}) {
@@ -29,7 +29,7 @@ export default class RendererPlugin extends BaseRendererPlugin {
     }
 
     /**
-     * Initialization - Crée l'adapter
+     * Initialization - Creates the adapter
      */
     async onInit(context) {
         await super.onInit(context);
@@ -44,7 +44,7 @@ export default class RendererPlugin extends BaseRendererPlugin {
     }
 
     /**
-     * Avant l'exécution des tests
+     * Before test execution
      */
     async onBeforeRun(process) {
         if (this.adapter && this.adapter.clear) {
@@ -53,7 +53,7 @@ export default class RendererPlugin extends BaseRendererPlugin {
     }
 
     /**
-     * Après l'exécution - Génère le rapport
+     * After execution - Generates report
      */
     async onAfterRun(process) {
         // Results are now available in process
@@ -64,7 +64,7 @@ export default class RendererPlugin extends BaseRendererPlugin {
     }
 
     /**
-     * Génération du rapport
+     * Report generation
      */
     async onReport(process) {
         if (this.adapter) {

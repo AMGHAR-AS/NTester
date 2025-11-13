@@ -10,7 +10,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 /**
  * HTMLServerPlugin - Serveur HTTP avec live reload
  *
- * Lance un serveur HTTP pour afficher les rapports HTML en temps réel
+ * Launches HTTP server to display HTML reports in real-time
  * avec rechargement automatique lors des modifications
  */
 export default class HTMLServerPlugin extends ServerPlugin {

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Démonstration complète du système de plugins NTester
+ * Complete demonstration of NTester plugin system
  *
- * Montre comment utiliser:
+ * Shows how to use:
  * - PluginManager
  * - RendererPlugin (adapters terminaux)
  * - HTMLExportPlugin (export HTML)

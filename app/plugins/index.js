@@ -1,7 +1,7 @@
 /**
  * NTester Plugins - Exports
  *
- * Système de plugins pour étendre NTester
+ * Plugin system to extend NTester
  */
 
 // Core
@@ -14,7 +14,7 @@ export { default as HTMLExportPlugin } from './HTMLExportPlugin.js';
 export { default as HTMLServerPlugin } from './HTMLServerPlugin.js';
 
 /**
- * Helper pour créer et enregistrer rapidement des plugins
+ * Helper to create and register plugins quickly
  */
 export function registerPlugin(name, plugin, type) {
     const manager = getPluginManager();
@@ -23,7 +23,7 @@ export function registerPlugin(name, plugin, type) {
 }
 
 /**
- * Helper pour initialiser les plugins avec le contexte NTester
+ * Helper to initialize plugins with NTester context
  */
 export async function initPlugins(context) {
     const manager = getPluginManager();
@@ -32,7 +32,7 @@ export async function initPlugins(context) {
 }
 
 /**
- * Crée une configuration de plugins par défaut
+ * Creates default plugin configuration
  */
 export async function createDefaultPlugins(options = {}) {
     const {

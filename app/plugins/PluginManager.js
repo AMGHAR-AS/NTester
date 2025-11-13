@@ -3,7 +3,7 @@ import AbstractPlugin, { PluginTypes } from './AbstractPlugin.js';
 /**
  * PluginManager - Gestionnaire central de tous les plugins
  *
- * Gère le cycle de vie, l'enregistrement et l'exécution des plugins
+ * Manages plugin lifecycle, registration and execution
  */
 export default class PluginManager {
     constructor() {
