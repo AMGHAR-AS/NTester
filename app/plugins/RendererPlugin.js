@@ -16,7 +16,7 @@ export default class RendererPlugin extends BaseRendererPlugin {
     }
 
     /**
-     * Métadonnées du plugin
+     * Plugin metadata
      */
     getMetadata() {
         return {
@@ -29,7 +29,7 @@ export default class RendererPlugin extends BaseRendererPlugin {
     }
 
     /**
-     * Initialisation - Crée l'adapter
+     * Initialization - Crée l'adapter
      */
     async onInit(context) {
         await super.onInit(context);
@@ -56,8 +56,8 @@ export default class RendererPlugin extends BaseRendererPlugin {
      * Après l'exécution - Génère le rapport
      */
     async onAfterRun(process) {
-        // Les résultats sont maintenant disponibles dans process
-        // On peut utiliser l'adapter pour afficher un résumé
+        // Results are now available in process
+        // Can use adapter to display summary
         if (this.adapter) {
             await this._displaySummary(process);
         }
@@ -73,7 +73,7 @@ export default class RendererPlugin extends BaseRendererPlugin {
     }
 
     /**
-     * Affiche un résumé des tests
+     * Displays test summary
      */
     async _displaySummary(process) {
         const stats = this._calculateStats(process);
@@ -95,16 +95,16 @@ export default class RendererPlugin extends BaseRendererPlugin {
     }
 
     /**
-     * Génère un rapport complet
+     * Generates complete report
      */
     async _generateReport(process) {
-        // Cette méthode peut être étendue pour générer des rapports plus détaillés
-        // Pour l'instant, elle affiche juste un message
+        // This method can be extended to generate more detailed reports
+        // For now, just displays a message
         await this.adapter.displayText('Report generated', { color: 'cyan' });
     }
 
     /**
-     * Calcule les statistiques des tests
+     * Calculates statistics des tests
      */
     _calculateStats(process) {
         let totalTests = 0;
@@ -147,14 +147,14 @@ export default class RendererPlugin extends BaseRendererPlugin {
     }
 
     /**
-     * Rendu personnalisé (implémentation de l'interface)
+     * Custom rendering (implémentation de l'interface)
      */
     async render(data) {
         if (!this.adapter) {
             throw new Error('Adapter not initialized');
         }
 
-        // Détecte le type de données et utilise la bonne méthode de l'adapter
+        // Detects data type and uses appropriate adapter method
         if (typeof data === 'string') {
             await this.adapter.displayText(data);
         } else if (Array.isArray(data)) {
@@ -170,20 +170,20 @@ export default class RendererPlugin extends BaseRendererPlugin {
         } else if (data.type === 'progress') {
             return await this.adapter.displayProgress(data.options);
         } else {
-            // Par défaut, affiche en JSON
+            // By default, display as JSON
             await this.adapter.displayText(JSON.stringify(data, null, 2));
         }
     }
 
     /**
-     * Accès direct à l'adapter sous-jacent
+     * Direct access to underlying adapter
      */
     getAdapter() {
         return this.adapter;
     }
 
     /**
-     * Destruction
+     * Cleanup
      */
     async onDestroy() {
         if (this.adapter && this.adapter.exit) {

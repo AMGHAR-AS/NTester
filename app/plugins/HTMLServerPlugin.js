@@ -29,7 +29,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Métadonnées du plugin
+     * Plugin metadata
      */
     getMetadata() {
         return {
@@ -43,7 +43,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Initialisation
+     * Initialization
      */
     async onInit(context) {
         await super.onInit(context);
@@ -51,7 +51,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Démarre le serveur
+     * Starts the server
      */
     async start() {
         await this._createServer();
@@ -62,7 +62,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Arrête le serveur
+     * Stops the server
      */
     async stop() {
         if (this.watcher) {
@@ -81,7 +81,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Crée le serveur HTTP
+     * Creates HTTP server
      */
     async _createServer() {
         this.server = createServer(async (req, res) => {
@@ -114,7 +114,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Sert le fichier HTML avec live reload injecté
+     * Serves HTML file with injected live reload
      */
     async _serveHTML(res) {
         try {
@@ -135,7 +135,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Gère les connexions Server-Sent Events pour le live reload
+     * Handles Server-Sent Events connections for live reload
      */
     _handleSSE(req, res) {
         res.writeHead(200, {
@@ -150,14 +150,14 @@ export default class HTMLServerPlugin extends ServerPlugin {
         // Envoie un message initial
         res.write('data: {"type":"connected"}\n\n');
 
-        // Nettoie à la déconnexion
+        // Clean up on disconnect
         req.on('close', () => {
             this.clients.delete(res);
         });
     }
 
     /**
-     * Sert la page de status
+     * Serves status page
      */
     _serveStatus(res) {
         const stats = {
@@ -173,7 +173,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Sert les stats en JSON
+     * Serves stats as JSON
      */
     _serveStats(res) {
         const stats = {
@@ -190,7 +190,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Génère la page de status
+     * Generates status page
      */
     _getStatusPage(stats) {
         const uptimeFormatted = this._formatUptime(stats.uptime);
@@ -283,7 +283,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Format uptime
+     * Formats uptime
      */
     _formatUptime(seconds) {
         const days = Math.floor(seconds / 86400);
@@ -301,7 +301,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Styles pour la page de status
+     * Styles for status page
      */
     _getStatusStyles() {
         return `
@@ -520,7 +520,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Scripts pour la page de status
+     * Scripts for status page
      */
     _getStatusScripts() {
         return `
@@ -565,7 +565,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Notifie tous les clients connectés
+     * Notifies all connected clients
      */
     _notifyClients(event) {
         const data = `data: ${JSON.stringify(event)}\n\n`;
@@ -580,7 +580,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Script de live reload
+     * Live reload script
      */
     _getLiveReloadScript() {
         return `
@@ -623,7 +623,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Page d'erreur
+     * Error page
      */
     _getErrorPage(error) {
         return `
@@ -667,7 +667,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Surveille les changements de fichiers
+     * Watches for file changes
      */
     async _startWatching() {
         if (!this.autoRerun) {
@@ -676,7 +676,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
 
         const watchPaths = Array.isArray(this.watchFiles) ? this.watchFiles : [this.watchFiles];
 
-        // Surveille le fichier HTML
+        // Watch HTML file
         const htmlPath = resolve(this.htmlFile);
 
         try {
@@ -690,24 +690,24 @@ export default class HTMLServerPlugin extends ServerPlugin {
             console.warn('Could not watch HTML file:', error.message);
         }
 
-        // Surveille aussi les fichiers de test si demandé
+        // Also watch test files if requested
         if (this.autoRerun && this._context) {
             this._watchTestFiles(watchPaths);
         }
     }
 
     /**
-     * Surveille les fichiers de test
+     * Watches test files
      */
     _watchTestFiles(paths) {
-        // Cette fonctionnalité nécessiterait chokidar pour être robuste
-        // Pour l'instant, on se contente de surveiller le HTML
+        // This feature would require chokidar to be robust
+        // For now, just watch the HTML
         console.log('📝 File watching for auto-rerun not implemented yet');
         console.log('   (requires chokidar or similar for glob patterns)');
     }
 
     /**
-     * Après l'exécution - Notifie les clients
+     * After execution - Notifies clients
      */
     async onAfterRun(process) {
         if (this.clients.size > 0) {
@@ -722,7 +722,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Avant l'exécution - Notifie les clients
+     * Before execution - Notifies clients
      */
     async onBeforeRun(process) {
         if (this.clients.size > 0) {
@@ -731,7 +731,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Destruction
+     * Cleanup
      */
     async onDestroy() {
         await this.stop();
@@ -739,14 +739,14 @@ export default class HTMLServerPlugin extends ServerPlugin {
     }
 
     /**
-     * Obtenir l'URL du serveur
+     * Gets server URL
      */
     getURL() {
         return `http://${this.host}:${this.port}`;
     }
 
     /**
-     * Obtenir le nombre de clients connectés
+     * Gets connected client count
      */
     getClientCount() {
         return this.clients.size;

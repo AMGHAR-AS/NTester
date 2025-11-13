@@ -5,7 +5,7 @@ import { resolve } from 'path';
 /**
  * HTMLExportPlugin - Exporte les résultats des tests en HTML
  *
- * Génère un rapport HTML complet avec styles et interactivité
+ * Exports test results to HTML with styles and interactivity
  */
 export default class HTMLExportPlugin extends ReporterPlugin {
     constructor(options = {}) {
@@ -19,7 +19,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Métadonnées du plugin
+     * Plugin metadata
      */
     getMetadata() {
         return {
@@ -32,7 +32,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Initialisation
+     * Initialization
      */
     async onInit(context) {
         await super.onInit(context);
@@ -40,14 +40,14 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Après l'exécution - Collecte les résultats
+     * After execution - Collects results
      */
     async onAfterRun(process) {
         this.results = this._collectResults(process);
     }
 
     /**
-     * Génération du rapport HTML
+     * Report generation
      */
     async onReport(process) {
         if (!this.results) {
@@ -58,7 +58,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère le fichier HTML
+     * Generates the HTML file
      */
     async generate(results) {
         const html = this._generateHTML(results);
@@ -78,7 +78,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Collecte les résultats des tests
+     * Collects test results
      */
     _collectResults(process) {
         const results = {
@@ -124,7 +124,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Calcule les statistiques
+     * Calculates statistics
      */
     _calculateStats(results) {
         let totalSteps = 0;
@@ -152,7 +152,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère le HTML complet
+     * Generates complete HTML
      */
     _generateHTML(results) {
         return `<!DOCTYPE html>
@@ -183,7 +183,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère la toolbar
+     * Generates toolbar
      */
     _generateToolbar(results) {
         return `
@@ -206,7 +206,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère l'en-tête
+     * Generates header
      */
     _generateHeader(results) {
         return `
@@ -238,7 +238,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère les filtres
+     * Generates filters
      */
     _generateFilters() {
         return `
@@ -259,7 +259,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère les actions flottantes
+     * Generates floating actions
      */
     _generateFloatingActions() {
         return `
@@ -270,7 +270,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère les statistiques
+     * Generates statistics
      */
     _generateStats(stats) {
         const statusClass = stats.failed === 0 ? 'success' : 'partial';
@@ -321,7 +321,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère les résultats des tests
+     * Generates test results
      */
     _generateTestResults(results) {
         let html = '<section class="test-results">';
@@ -335,7 +335,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère un sous-test
+     * Generates a subtest
      */
     _generateSubTest(subTest) {
         const allPassed = subTest.steps.every(s => s.passed);
@@ -364,7 +364,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Génère une étape
+     * Generates a step
      */
     _generateStep(step) {
         const statusClass = step.passed ? 'success' : 'failure';
@@ -408,7 +408,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Échappe le HTML
+     * Escapes HTML
      */
     _escapeHtml(text) {
         const map = {
@@ -422,7 +422,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Styles CSS
+     * CSS Styles
      */
     _getStyles() {
         return `
@@ -783,7 +783,7 @@ export default class HTMLExportPlugin extends ReporterPlugin {
     }
 
     /**
-     * Ouvre le rapport dans le navigateur
+     * Opens report in browser
      */
     async _openInBrowser(path) {
         const { default: open } = await import('open');
