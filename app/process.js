@@ -1,5 +1,6 @@
 import {NTester} from "./NTester.js";
 import logger from "./logger.js";
+import { getPluginManager } from "./plugins/PluginManager.js";
 
 export const engine = {
     tests: [],
@@ -21,10 +22,22 @@ function initMainTest(process) {
         return this
     }
 
-    process.i.run = function () {
-        function runSTest(sProcess) {
-            function runStep(step) {
+    process.i.run = async function () {
+        const pluginManager = getPluginManager();
+
+        // Hook: Before run
+        await pluginManager.executeHook('onBeforeRun', process);
+
+        async function runSTest(sProcess) {
+            // Hook: Before test
+            await pluginManager.executeHook('onBeforeTest', sProcess);
+
+            async function runStep(step) {
                 engine.current.step = step
+
+                // Hook: Before step
+                await pluginManager.executeHook('onBeforeStep', step);
+
                 try {
                     step.call();
                     for (let i=0; i<step.log.length; i++) {
@@ -44,21 +57,54 @@ function initMainTest(process) {
                     step.log = [false];
                     step.error = logger.errorTest(e)
                 }
+
+                // Wait for step to complete
+                await step.pending;
+
+                // Hook: After step
+                await pluginManager.executeHook('onAfterStep', step);
             }
+
             engine.current.sTest = sProcess;
             for (let i=0; i<sProcess.steps.length; i++) {
-                runStep(sProcess.steps[i])
+                await runStep(sProcess.steps[i])
             }
+
+            // Hook: After test
+            await pluginManager.executeHook('onAfterTest', sProcess);
         }
+
         engine.current.test = process;
         for (let i=0; i<process.subTests.length; i++) {
-            runSTest(process.subTests[i])
+            await runSTest(process.subTests[i])
         }
+
+        // Hook: After run
+        await pluginManager.executeHook('onAfterRun', process);
+
         return this
     }
 
-    process.i.console = function () {
+    process.i.console = async function () {
+        const pluginManager = getPluginManager();
+
+        // Hook: Report generation
+        await pluginManager.executeHook('onReport', process);
+
         logger.generateLog(process).consoleOutput()
+        return this
+    }
+
+    // Initialize plugins with context
+    process.i.initPlugins = async function () {
+        const pluginManager = getPluginManager();
+        const context = {
+            NTester,
+            engine,
+            logger,
+            process
+        };
+        await pluginManager.initAll(context);
         return this
     }
 }

@@ -44,7 +44,36 @@ function generateLog(process) {
             }
             sLog.steps.push(stepLog);
 
-            step.pending.then(() => {
+            // Check if step.pending exists (it might not if step hasn't been executed yet)
+            if (step.pending && typeof step.pending.then === 'function') {
+                step.pending.then(() => {
+                    stepLog.status = 'ok'
+                    for (let i = 0; i < step.log.length; i++) {
+                        if (step.log[i] === true) {
+                            stepLog.passed += 1;
+                        } else {
+                            stepLog.status = 'error'
+                            stepLog.errors += 1;
+                        }
+                    }
+                    if (step.error) {
+                        stepLog.status = 'error-test';
+                    }
+
+                    if (stepLog.errors) {
+                        sLog.errors += 1
+                    } else {
+                        sLog.passed += 1
+                    }
+
+                    sLog.nend -= 1;
+                    if (sLog.nend === 0) {
+                        log.nend -= 1
+
+                    }
+                })
+            } else {
+                // If no pending promise, mark as completed immediately
                 stepLog.status = 'ok'
                 for (let i = 0; i < step.log.length; i++) {
                     if (step.log[i] === true) {
@@ -67,9 +96,8 @@ function generateLog(process) {
                 sLog.nend -= 1;
                 if (sLog.nend === 0) {
                     log.nend -= 1
-
                 }
-            })
+            }
         }
 
         log.subTests.push(sLog)
