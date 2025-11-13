@@ -327,9 +327,7 @@ export default function tester(target) {
             return check(() => isContain(target, ref))
         },
         default: function () { //reset result
-            for (let i=0; i<pending.length; i++) {
-                pending.pop()
-            }
+            pending.length = 0  // Clear the array efficiently
             pending.push(() => true)
             return {
                 get and() {
