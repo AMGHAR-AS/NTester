@@ -15,20 +15,24 @@ export class NTester {
     static useFakeTimer = function () {
         if (!fTimeout) {
             fTimeout = globalThis.setTimeout
+            globalThis.setTimeout = function() {
+                // Fake timer implementation - does nothing
+            }
         }
         return NTester
     }
 
     static restoreFakeTimer = function () {
-        if (!fTimeout) {
-            fTimeout = globalThis.setTimeout
+        if (fTimeout) {
+            globalThis.setTimeout = fTimeout
+            fTimeout = null
         }
         return NTester
     }
     
     static fn = function () {
         const fn = {
-            fn: eval('function fn() {}')
+            fn: function() {}
         }
         NTester.spy(fn, 'fn')
         return fn.fn

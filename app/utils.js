@@ -1,7 +1,7 @@
 export function getDateStr() {
     const date = new Date();
-    let str = ''+date.getDay();
-    if (date.getDay()<10) {
+    let str = ''+date.getDate();
+    if (date.getDate()<10) {
         str = '0'+str
     }
     if (date.getMonth()+1<10) {

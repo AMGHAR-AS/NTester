@@ -219,8 +219,17 @@ function consoleLog(log, active = 'main') {
     }
 }
 
-function errorTest() {
+function errorTest(error) {
+    if (!error) return null;
 
+    return {
+        message: error.message || String(error),
+        stack: error.stack || null,
+        name: error.name || 'Error',
+        toString: function() {
+            return this.name + ': ' + this.message;
+        }
+    }
 }
 
 const logger = {

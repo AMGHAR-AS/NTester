@@ -42,7 +42,7 @@ export function spyFunction(context, callName) {
             log.args.push(Array.from(args));
             let r;
             try {
-                r = oCall.call(context, args);
+                r = oCall.apply(context, args);
             } catch (e) {
                 r = e;
             }

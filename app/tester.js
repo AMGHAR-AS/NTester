@@ -86,7 +86,9 @@ export default function tester(target) {
                 }
             }
 
-            resolve(eval(resultFinal.join('')||'true'))
+            // Safer alternative to eval() using Function constructor
+            const expression = resultFinal.join('')||'true';
+            resolve(new Function('return ' + expression)())
         })
     }
 
@@ -214,7 +216,7 @@ export default function tester(target) {
           return check(() => isInstance(target))
         },
         function: function () {
-            return check((typeof target === "function") && !isClass(target))
+            return check(() => (typeof target === "function") && !isClass(target))
         },
         instanceOf: function (ref) {
             return check(() => isInstanceOf(target, ref))
@@ -229,7 +231,7 @@ export default function tester(target) {
             return check(() => (typeof target === "string") && ((noEmpty && !!target) || !noEmpty))
         },
         emptyString: function (removeSpace) {
-            return check(() => (typeof target === "string") && isEmptyString(removeSpace))
+            return check(() => (typeof target === "string") && isEmptyString(target, removeSpace))
         },
         length: function (ref) {
             if (Array.isArray(target) || (typeof target === "string")) {
@@ -241,13 +243,13 @@ export default function tester(target) {
             }
         },
         stringNumber: function () {
-            return check(() => (typeof target === "string") && (/^(([1-9]+)|(([1-9]+)\.([0-9]*)))$/.test(target)))
+            return check(() => (typeof target === "string") && (/^(([0-9]+)|(([0-9]+)\.([0-9]+)))$/.test(target)))
         },
         stringInteger: function () {
-            return check(() => (typeof target === "string") && (/^([1-9]+)$/.test(target)))
+            return check(() => (typeof target === "string") && (/^([0-9]+)$/.test(target)))
         },
         stringFloat: function () {
-            return check(() => (typeof target === "string") && (/^(([1-9]+)\.([0-9]*))$/.test(target)))
+            return check(() => (typeof target === "string") && (/^(([0-9]+)\.([0-9]+))$/.test(target)))
         },
         number: function () {
             return check(() => typeof target === "number")
@@ -267,7 +269,7 @@ export default function tester(target) {
         lessThan: function (ref) {
             return check(() => (typeof target === "number") && (target < ref))
         },
-        greaterThanOrEqual: function () {
+        greaterThanOrEqual: function (ref) {
             return check(() => (typeof target === "number") && (target >= ref))
         },
         lessThanOrEqual: function (ref) {
@@ -304,7 +306,7 @@ export default function tester(target) {
             if (ref instanceof RegExp) {
                 return check(() => ref.test(target))
             } else {
-                check(() => (new RegExp(ref + '')).test(target))
+                return check(() => (new RegExp(ref + '')).test(target))
             }
         },
         equal: function (ref) {
