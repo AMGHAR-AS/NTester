@@ -26,6 +26,7 @@ export default class HTMLServerPlugin extends ServerPlugin {
         this.server = null;
         this.clients = new Set();
         this.watcher = null;
+        this.fileWatcher = null;
     }
 
     /**
@@ -65,9 +66,16 @@ export default class HTMLServerPlugin extends ServerPlugin {
      * Stops the server
      */
     async stop() {
+        // Close HTML file watcher
         if (this.watcher) {
             this.watcher.close();
             this.watcher = null;
+        }
+
+        // Close test file watcher (chokidar)
+        if (this.fileWatcher) {
+            await this.fileWatcher.close();
+            this.fileWatcher = null;
         }
 
         if (this.server) {
@@ -699,11 +707,67 @@ export default class HTMLServerPlugin extends ServerPlugin {
     /**
      * Watches test files
      */
-    _watchTestFiles(paths) {
-        // This feature would require chokidar to be robust
-        // For now, just watch the HTML
-        console.log('📝 File watching for auto-rerun not implemented yet');
-        console.log('   (requires chokidar or similar for glob patterns)');
+    async _watchTestFiles(paths) {
+        try {
+            // Try to load chokidar (optional dependency)
+            const chokidar = await import('chokidar').catch(() => null);
+
+            if (!chokidar) {
+                console.log('📝 File watching for auto-rerun requires chokidar');
+                console.log('   Install it with: npm install chokidar');
+                return;
+            }
+
+            // Watch test files with chokidar
+            const watchPatterns = this.watchFiles || paths || ['./tests/**/*.js', './app/**/*.js'];
+
+            console.log('👀 Watching test files for changes...');
+            console.log(`   Patterns: ${watchPatterns.join(', ')}`);
+
+            this.fileWatcher = chokidar.default.watch(watchPatterns, {
+                ignored: /(^|[\/\\])\../, // ignore dotfiles
+                persistent: true,
+                ignoreInitial: true
+            });
+
+            this.fileWatcher.on('change', async (path) => {
+                console.log(`\n📝 File changed: ${path}`);
+                console.log('🔄 Re-running tests...\n');
+
+                try {
+                    // Notify clients that tests are starting
+                    this._notifyClients({ type: 'test-start' });
+
+                    // If we have access to the test runner, re-run tests
+                    if (this._context && this._context.process && this._context.process.i) {
+                        const testProcess = this._context.process;
+
+                        // Re-run tests
+                        await testProcess.i.run();
+
+                        // Tests completed, report will trigger reload
+                        console.log('\n✅ Tests completed - HTML report updated\n');
+                    } else {
+                        // Just notify that a reload might be needed
+                        console.log('⚠️  Auto-rerun not fully configured');
+                        console.log('   HTML file watch will handle reloads');
+                    }
+                } catch (error) {
+                    console.error('❌ Error re-running tests:', error.message);
+                    this._notifyClients({
+                        type: 'error',
+                        message: error.message
+                    });
+                }
+            });
+
+            this.fileWatcher.on('error', (error) => {
+                console.error('File watcher error:', error);
+            });
+
+        } catch (error) {
+            console.warn('Could not set up file watching:', error.message);
+        }
     }
 
     /**

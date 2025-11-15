@@ -26,6 +26,9 @@
   "dependencies": {
     "terminal-kit": "^3.1.1"
   },
+  "optionalDependencies": {
+    "chokidar": "^3.6.0"
+  },
   "keywords": ["javascript", "test", "testing", "jtest", "library"],
   "copyright": {
     "title": "NTester",
