@@ -589,4 +589,7 @@ mainTest.addSubTest(resetTests)
 mainTest.addSubTest(nothingTests)
 
 // Exécution de la suite complète
-mainTest.run().console()
+(async () => {
+    const result = await mainTest.run();
+    await result.console();
+})();

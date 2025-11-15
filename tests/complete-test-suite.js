@@ -307,5 +307,8 @@ mainTest.addSubTest(spyTests)
 mainTest.addSubTest(utilTests)
 mainTest.addSubTest(edgeTests)
 
-console.log('\n🚀 Démarrage de la suite de tests NTester...\n')
-mainTest.run().console()
+console.log('\n🚀 Démarrage de la suite de tests NTester...\n');
+(async () => {
+    const result = await mainTest.run();
+    await result.console();
+})();
